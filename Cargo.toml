@@ -1,0 +1,11 @@
+[package]
+name = "fraglog"
+version = "0.1.0"
+edition = "2024"
+description = "Short script to extract lines from logfile for a given period"
+readme = "README.md"
+categories = ["command-line-utilities"]
+keywords = ["cli", "logfile", "utility"]
+license = "MIT"
+
+[dependencies]
