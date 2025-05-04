@@ -4,11 +4,6 @@ use std::io::{self, BufRead};
 use std::path::Path;
 use std::fmt;
 
-/*
-cargo run example.log "2025-03-15T06:00:30" "2025-05-21T12:00:30"
-cargo run example_day.log "06:00:30" "12:00:30"
-*/
-
 fn main() {
     // Check parameters
     let args: Vec<String> = env::args().collect();
@@ -43,6 +38,7 @@ fn main() {
         println!("Reading {config_log_file_path}...");
     }
 
+    // Determines whether it is a datetime or a time (only)
     let search_start = detect_between_date_datetime_or_time(&config_start_date).unwrap();
     let search_end = detect_between_date_datetime_or_time(&config_end_date).unwrap();
     let search_mode : ExpectedFormat;
@@ -61,6 +57,7 @@ fn main() {
         panic!("Invalid parameters, <period_start> and <period_end> should have the same format");
     }
 
+    // Parse file and filter lines
     match search_mode {
         ExpectedFormat::DateAndTime => parse_datetime_logfile(&config_log_file_path, &search_start, &search_end, verbose_mode),
         ExpectedFormat::TimeOnly => parse_time_logfile(&config_log_file_path, &search_start.get_time(), &search_end.get_time(), verbose_mode),
@@ -249,15 +246,6 @@ enum ExpectedFormat {
     TimeOnly,
     DateAndTime,
 }
-
-/*
-Autre formats de date
-SYSLOg: 2025-04-27T07:35:33.649529+02:00
-Access log apache2: 127.0.0.1 - - [17/Jan/2025:16:17:01 +0100] "GET / HTTP/1.1" 200 3380 
-Apache2 Error log: [Sun Apr 27 07:35:32.627590 2025]
-PHP: [26-Dec-2024 11:52:21] NOTICE: fpm is running, pid 8379
-ClamAV: Sun Apr 20 11:26:13 2025
-*/
 
 fn detect_between_date_datetime_or_time(input_value: &str) -> Option<Datetime> {
     let input_size = input_value.chars().count();
